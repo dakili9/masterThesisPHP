@@ -48,7 +48,13 @@ class BaseRepository implements EloquentRepositoryInterface
      */
     public function create(array $attributes): Model
     {
-        return $this->model::create($attributes);
+        $model = $this->model::create($attributes);
+
+        $model->refresh();
+
+        var_dump($model->getAttributes());
+
+        return $model;
     }
 
     /**
@@ -78,6 +84,17 @@ class BaseRepository implements EloquentRepositoryInterface
         $model = $this->find($id);
 
         return $model->delete();
+    }
+
+    /**
+     * Checks if a resource with given id exists.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function exists(string $id): bool
+    {
+        return $this->model->where('id', $id)->exists();
     }
 }
 

@@ -46,4 +46,12 @@ interface EloquentRepositoryInterface
      * @return bool
      */
     public function delete(string $id): bool;
+
+    /**
+     * Checks if a resource with given id exists.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function exists(string $id): bool;
 }

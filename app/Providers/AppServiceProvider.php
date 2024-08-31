@@ -8,7 +8,11 @@ use App\Repositories\Eloquent\TaskRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
+use App\Services\CategoryService;
+use App\Services\Interfaces\CategoryServiceInterface;
+use App\Services\Interfaces\TaskServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use App\Services\TaskService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,13 +44,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            TaskRepositoryInterface::class,
-            TaskRepository::class
+            TaskServiceInterface::class,
+            TaskService::class
         );
 
         $this->app->bind(
-            CategoryRepositoryInterface::class,
-            CategoryRepository::class
+            CategoryServiceInterface::class,
+            CategoryService::class
         );
 
     }
