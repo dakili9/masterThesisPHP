@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +14,6 @@ Route::get('/', function () {
     return 'alo bre';
 });
 
-Route::apiResource('users', UserController::class);
-Route::apiResource('tasks', TaskController::class);
-Route::apiResource('categories', CategoryController::class);
+Route::apiResource('users', UsersController::class);
+Route::apiResource('tasks', TasksController::class);
+Route::apiResource('categories', CategoriesController::class);

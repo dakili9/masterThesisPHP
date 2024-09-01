@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Services\Interfaces\CategoryServiceInterface;
 use Illuminate\Http\JsonResponse;
 
-class CategoryController extends Controller
+class CategoriesController extends Controller
 {
     private readonly CategoryServiceInterface $categoryService;
 

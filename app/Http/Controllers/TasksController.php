@@ -8,7 +8,7 @@ use App\Models\Task;
 use App\Services\Interfaces\TaskServiceInterface;
 use Illuminate\Http\JsonResponse;
 
-class TaskController extends Controller
+class TasksController extends Controller
 {
     private readonly TaskServiceInterface $taskService;
 

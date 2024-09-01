@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
     private readonly UserServiceInterface $userService;
 
