@@ -22,6 +22,6 @@ class Category extends Model
      */
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'plan_id', 'id');
+        return $this->hasMany(Task::class, 'category_id', 'id');
     }
 }

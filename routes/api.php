@@ -16,4 +16,4 @@ Route::get('/', function () {
 
 Route::apiResource('users', UserController::class);
 Route::apiResource('tasks', TaskController::class);
-//Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories', CategoryController::class);

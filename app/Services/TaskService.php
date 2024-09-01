@@ -96,7 +96,7 @@ class TaskService implements TaskServiceInterface
      * @param array $data
      * @return void
      */
-    public function checkIfUserAndCategoryExist(array $data): void
+    private function checkIfUserAndCategoryExist(array $data): void
     {
         if (!$this->userRepository->exists($data['user_id'])) {
             throw new ModelNotFoundException("User not found");

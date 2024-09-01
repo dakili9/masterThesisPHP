@@ -50,11 +50,7 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         $model = $this->model::create($attributes);
 
-        $model->refresh();
-
-        var_dump($model->getAttributes());
-
-        return $model;
+        return $model->fresh();
     }
 
     /**
