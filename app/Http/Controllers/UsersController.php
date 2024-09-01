@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangeEmailRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\ViewModels\TaskViewModel;
+use App\Http\ViewModels\UserTasksViewModel;
+use App\Models\User;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class UsersController extends Controller
 {
@@ -109,5 +113,54 @@ class UsersController extends Controller
     {
         $updatedUser = $this->userService->update($userId, ['email' => $request->input('email')]);
         return response()->json($updatedUser);
+    }
+
+//    /**
+//     * Display the user's tasks.
+//     *
+//     * @param string $userId
+//     * @return View
+//     */
+//    public function showUserTasks(string $userId): View
+//    {
+//        $user = User::with(['tasks.category:id,name'])->findOrFail($userId);
+//
+//        return view('userTasks', ['user' => $user]);
+//    }
+
+    /**
+     * Display the user's tasks.
+     *
+     * @param string $userId
+     * @return View
+     */
+    public function showUserTasks(string $userId): View
+    {
+        $viewModel = $this->getUserTasksViewModel($userId);
+
+        return view('userTasks', ['view' => $viewModel]);
+    }
+
+    /**
+     * Generates a userTasks view model for a user with a certain id.
+     *
+     * @param $userId
+     * @return UserTasksViewModel
+     */
+    private function getUserTasksViewModel($userId): UserTasksViewModel
+    {
+        $userData = $this->userService->getUserWithTasks($userId);
+
+        $taskViewModels = $userData['tasks']->map(function ($task) {
+            return new TaskViewModel(
+                $task->name,
+                $task->description,
+                $task->status,
+                $task->due_date,
+                $task->category->name
+            );
+        });
+
+        return new UserTasksViewModel($userData['name'], $taskViewModels);
     }
 }

@@ -6,9 +6,7 @@ use App\Repositories\UserRepositoryInterface;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class UserService implements UserServiceInterface
 {
@@ -21,6 +19,8 @@ class UserService implements UserServiceInterface
 
     /**
      * Retrieves all the model instances.
+     *
+     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -75,45 +75,18 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Validates the array containing attributes for creating a user.
+     * Retrieves the user with given id with category and tasks.
      *
-     * @param array $data
+     * @param string $userId
      * @return array
-     * @throws ValidationException
      */
-    private function validateCreateData(array $data): array
+    public function getUserWithTasks(string $userId): array
     {
-        $rules = [
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8'],
-            'admin' => ['boolean']
+        $user = $this->userRepository->findWithTasksAndCategory($userId);
+
+        return [
+            'name' => $user->name,
+            'tasks' => $user->tasks
         ];
-
-        $validatedData = Validator::make($data, $rules)->validate();
-
-        return array_diff_key($data, $validatedData);
-    }
-
-    /**
-     * Validates the array containing attributes for updating a user.
-     *
-     * @param string $uuid
-     * @param array $data
-     * @return array
-     * @throws ValidationException
-     */
-    private function validateUpdateData(string $uuid, array $data): array
-    {
-        $rules = [
-            'name' => ['nullable', 'string'],
-            'email' => ['nullable', 'email', 'unique:users,email,'.$uuid.',id'],
-            'password' => ['nullable', 'min:8'],
-            'admin' => ['nullable', 'boolean']
-        ];
-
-        $validatedData = Validator::make($data, $rules)->validate();
-
-        return array_diff_key($data, $validatedData);
     }
 }

@@ -33,5 +33,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->where('email', $email)->first();
     }
+
+    /**
+     * Retrieves the user with given id with tasks and categories.
+     *
+     * @param string $userId
+     * @return User
+     */
+    public function findWithTasksAndCategory(string $userId): User
+    {
+        return $this->model::with(['tasks.category:id,name'])->findOrFail($userId);
+    }
 }
 

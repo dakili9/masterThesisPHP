@@ -21,5 +21,13 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return User|null
      */
     public function findByEmail(string $email): ?User;
+
+    /**
+     * Retrieves the user with given id with tasks and categories.
+     *
+     * @param string $userId
+     * @return User
+     */
+    public function findWithTasksAndCategory(string $userId): User;
 }
 
