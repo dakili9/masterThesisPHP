@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeEmailRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -84,5 +84,30 @@ class UsersController extends Controller
         $deleted = $this->userService->delete($uuid);
 
         return response()->json(['success' => $deleted]);
+    }
+
+    /**
+     * Sets user to be an admin.
+     *
+     * @param string $userId
+     * @return JsonResponse
+     */
+    public function setAdmin(string $userId): JsonResponse
+    {
+        $updatedUser = $this->userService->update($userId, ['admin' => true]);
+        return response()->json($updatedUser);
+    }
+
+    /**
+     * Changes users email.
+     *
+     * @param ChangeEmailRequest $request
+     * @param string $userId
+     * @return JsonResponse
+     */
+    public function changeEmail(ChangeEmailRequest $request, string $userId): JsonResponse
+    {
+        $updatedUser = $this->userService->update($userId, ['email' => $request->input('email')]);
+        return response()->json($updatedUser);
     }
 }
