@@ -70,4 +70,15 @@ class CategoryService implements CategoryServiceInterface
     {
         return $this->categoryRepository->delete($uuid);
     }
+
+    /**
+     * Retrieves categories with task count for each.
+     *
+     * @return Collection
+     */
+    public function getCategoriesWithTaskCount(): Collection
+    {
+        return $this->categoryRepository->getCategoriesWithTaskCount();
+    }
+
 }

@@ -14,10 +14,14 @@ Route::get('/', function () {
     return 'alo bre';
 });
 
+Route::get('/categories/with-task-count', [CategoriesController::class, 'indexWithTaskCount']);
+
 Route::apiResource('users', UsersController::class);
 Route::apiResource('tasks', TasksController::class);
 Route::apiResource('categories', CategoriesController::class);
 
 Route::patch('/users/{user}/admin', [UsersController::class, 'setAdmin']);
 Route::patch('/users/{user}/email', [UsersController::class, 'changeEmail']);
+
+
 

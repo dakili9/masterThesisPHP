@@ -88,4 +88,17 @@ class CategoriesController extends Controller
 
         return response()->json(['success' => $deleted]);
     }
+
+    /**
+     * Display categories with the task count for each.
+     *
+     * @return JsonResponse
+     */
+    public function indexWithTaskCount(): JsonResponse
+    {
+        $categories = $this->categoryService->getCategoriesWithTaskCount();
+
+        return response()->json($categories);
+    }
+
 }

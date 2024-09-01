@@ -31,7 +31,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
      */
     public function getCategoriesWithTaskCount(): Collection
     {
-        return Category::withCount('tasks')->get();
+        return  $this->model::withCount('tasks')->get();
     }
 }
 
