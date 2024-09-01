@@ -14,6 +14,7 @@ Route::get('/', function () {
     return 'alo bre';
 });
 
+Route::get('/tasks/filter', [TasksController::class, 'filter']);
 Route::get('/categories/with-task-count', [CategoriesController::class, 'indexWithTaskCount']);
 
 Route::apiResource('users', UsersController::class);

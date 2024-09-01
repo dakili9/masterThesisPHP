@@ -63,18 +63,22 @@ class Task extends Model
      */
     public function scopeByStatus(Builder $query, string $status): Builder
     {
-        return $query->where('status', $status);
+        return $query->whereRaw('LOWER(status) = ?', [strtolower($status)]);
     }
 
     /**
      * Scope a query to filter tasks that are due before a specific date.
      *
      * @param Builder $query
-     * @param Carbon $date
+     * @param string|Carbon $date
      * @return Builder
      */
-    public function scopeDueBefore(Builder $query, Carbon $date): Builder
+    public function scopeByDueBefore(Builder $query,  string|Carbon $date): Builder
     {
+        if (is_string($date)) {
+            $date = Carbon::parse($date);
+        }
+
         return $query->whereDate('due_date', '<=', $date);
     }
 

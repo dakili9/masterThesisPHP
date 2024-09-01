@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use App\Services\Interfaces\TaskServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
@@ -96,5 +97,14 @@ class TasksController extends Controller
         $deleted = $this->taskService->delete($uuid);
 
         return response()->json(['success' => $deleted]);
+    }
+
+    public function filter(Request $request): JsonResponse
+    {
+        $filters = $request->query();
+
+        $tasks = $this->taskService->filter($filters);
+
+        return response()->json($tasks);
     }
 }

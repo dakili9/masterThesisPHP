@@ -106,4 +106,15 @@ class TaskService implements TaskServiceInterface
             throw new ModelNotFoundException("Category not found");
         }
     }
+
+    /**
+     * Filter tasks according to given filters.
+     *
+     * @param $data
+     * @return Collection
+     */
+    public function filter($data): Collection
+    {
+        return $this->taskRepository->filter($data);
+    }
 }
