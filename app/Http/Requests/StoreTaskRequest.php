@@ -28,7 +28,6 @@ class StoreTaskRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['required', Rule::in(TaskStatus::values())],
-            'user_id' => ['required', 'exists:users,id'],
             'category_id' => ['required', 'exists:categories,id'],
             'due_date' => ['required', 'date', 'after_or_equal:today'],
         ];
