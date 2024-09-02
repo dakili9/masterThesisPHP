@@ -31,6 +31,6 @@ class CategoryPolicy
     {
         return $user->admin ?
             Response::allow() :
-            Response::deny('You do not have permission to create tasks.');
+            Response::deny('You do not have permission for this action.');
     }
 }

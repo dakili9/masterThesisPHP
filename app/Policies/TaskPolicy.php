@@ -39,18 +39,19 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): Response
     {
+        //var_dump($user->id, $task->user_id);
         return $user->admin || $user->id === $task->user_id ?
             Response::allow() :
-            Response::deny('You do not have permission to update tasks.');
+            Response::deny('You do not have permission to update this task.');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Task $task): Response
+    public function destroy(User $user): Response
     {
         return $user->admin ?
             Response::allow() :
-            Response::deny('You do not have permission to create tasks.');
+            Response::deny('You do not have permission to delete tasks.');
     }
 }

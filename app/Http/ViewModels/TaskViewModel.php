@@ -11,7 +11,7 @@ class TaskViewModel
 {
     public string $name;
 
-    public string $description;
+    public ?string $description;
 
     public string $status;
 
@@ -21,7 +21,7 @@ class TaskViewModel
 
     public function __construct(
         string $name,
-        string $description,
+        ?string $description,
         TaskStatus $status,
         Carbon $dueDate,
         string $categoryName

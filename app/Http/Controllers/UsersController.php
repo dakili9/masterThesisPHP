@@ -10,10 +10,19 @@ use App\Http\ViewModels\UserTasksViewModel;
 use App\Models\User;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
-class UsersController extends Controller
+class UsersController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show']),
+        ];
+    }
     private readonly UserServiceInterface $userService;
 
     public function __construct(UserServiceInterface $userServiceInterface)
@@ -48,6 +57,8 @@ class UsersController extends Controller
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
+        Gate::authorize('create', User::class);
+
         $reqData = $request->only([
             'name',
             'email',
@@ -68,6 +79,9 @@ class UsersController extends Controller
      */
     public function update(UpdateUserRequest $request, string $uuid): JsonResponse
     {
+        $user = $this->userService->getById($uuid);
+        Gate::authorize('update', $user);
+
         $reqData = $request->only([
             'name',
             'password'
@@ -85,6 +99,9 @@ class UsersController extends Controller
      */
     public function destroy(string $uuid): JsonResponse
     {
+        $user = $this->userService->getById($uuid);
+        Gate::authorize('destroy', $user);
+
         $deleted = $this->userService->delete($uuid);
 
         return response()->json(['success' => $deleted]);
@@ -98,7 +115,10 @@ class UsersController extends Controller
      */
     public function setAdmin(string $userId): JsonResponse
     {
+        Gate::authorize('updateSensitive', User::class);
+
         $updatedUser = $this->userService->update($userId, ['admin' => true]);
+
         return response()->json($updatedUser);
     }
 
@@ -111,7 +131,10 @@ class UsersController extends Controller
      */
     public function changeEmail(ChangeEmailRequest $request, string $userId): JsonResponse
     {
+        Gate::authorize('updateSensitive', User::class);
+
         $updatedUser = $this->userService->update($userId, ['email' => $request->input('email')]);
+
         return response()->json($updatedUser);
     }
 

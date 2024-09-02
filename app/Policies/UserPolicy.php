@@ -30,7 +30,7 @@ class UserPolicy
     {
         return $user->admin ?
             Response::allow() :
-            Response::deny('You do not have permission to create user.');
+            Response::deny('You do not have permission to create users.');
     }
 
     /**
@@ -40,23 +40,23 @@ class UserPolicy
     {
         return $user->admin || $user->id === $model->id ?
             Response::allow() :
-            Response::deny('You do not have permission to update user.');
+            Response::deny('You do not have permission to update this user.');
     }
 
-    public function updateSensitive(User $user, User $model): Response
+    public function updateSensitive(User $user): Response
     {
         return $user->admin  ?
             Response::allow() :
-            Response::deny('You do not have permission to create user.');
+            Response::deny('You do not have permission for this action.');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): Response
+    public function destroy(User $user, User $model): Response
     {
-        return $user->admin ?
+        return $user->admin && $user->id != $model->id ?
             Response::allow() :
-            Response::deny('You do not have permission to create user.');
+            Response::deny('You do not have permission to delete a user.');
     }
 }

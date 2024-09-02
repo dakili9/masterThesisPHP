@@ -48,9 +48,7 @@ class BaseRepository implements EloquentRepositoryInterface
      */
     public function create(array $attributes): Model
     {
-        $model = $this->model::create($attributes);
-
-        return $model->fresh();
+        return $this->model::create($attributes);
     }
 
     /**

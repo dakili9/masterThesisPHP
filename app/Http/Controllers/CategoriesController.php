@@ -7,9 +7,19 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Services\Interfaces\CategoryServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
-class CategoriesController extends Controller
+class CategoriesController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show'])
+        ];
+    }
+
     private readonly CategoryServiceInterface $categoryService;
 
     public function __construct(CategoryServiceInterface $categoryService)
@@ -37,6 +47,8 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoryRequest $request): JsonResponse
     {
+        Gate::authorize('crud', Category::class);
+
         $reqData = $request->only([
             'name',
         ]);
@@ -68,9 +80,12 @@ class CategoriesController extends Controller
      */
     public function update(UpdateCategoryRequest $request, string $uuid): JsonResponse
     {
+        Gate::authorize('crud', Category::class);
+
         $reqData = $request->only([
             'name'
         ]);
+
         $updatedCategory = $this->categoryService->update($uuid, $reqData);
 
         return response()->json($updatedCategory);
@@ -84,6 +99,8 @@ class CategoriesController extends Controller
      */
     public function destroy(string $uuid): JsonResponse
     {
+        Gate::authorize('crud', Category::class);
+
         $deleted = $this->categoryService->delete($uuid);
 
         return response()->json(['success' => $deleted]);

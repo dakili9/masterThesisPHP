@@ -8,9 +8,19 @@ use App\Models\Task;
 use App\Services\Interfaces\TaskServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
-class TasksController extends Controller
+class TasksController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show', 'filter']),
+        ];
+    }
+
     private readonly TaskServiceInterface $taskService;
 
     public function __construct(TaskServiceInterface $taskService)
@@ -38,14 +48,17 @@ class TasksController extends Controller
      */
     public function store(StoreTaskRequest $request): JsonResponse
     {
+        Gate::authorize('create', Task::class);
+
         $reqData = $request->only([
             'name',
             'description',
             'status',
-            'user_id',
             'category_id',
             'due_date',
+            'user_id'
         ]);
+
         $task = $this->taskService->create($reqData);
 
         return response()->json($task, 201);
@@ -73,14 +86,18 @@ class TasksController extends Controller
      */
     public function update(UpdateTaskRequest $request, string $uuid): JsonResponse
     {
+        $task = $this->taskService->getById($uuid);
+        Gate::authorize('update', $task);
+
         $reqData = $request->only([
             'name',
             'description',
             'status',
-            'user_id',
             'category_id',
             'due_date',
+            'user_id'
         ]);
+
         $updatedTask = $this->taskService->update($uuid, $reqData);
 
         return response()->json($updatedTask);
@@ -94,11 +111,18 @@ class TasksController extends Controller
      */
     public function destroy(string $uuid): JsonResponse
     {
+        Gate::authorize('destroy', Task::class);
         $deleted = $this->taskService->delete($uuid);
 
         return response()->json(['success' => $deleted]);
     }
 
+    /**
+     * Return tasks according to filters in request.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function filter(Request $request): JsonResponse
     {
         $filters = $request->query();
