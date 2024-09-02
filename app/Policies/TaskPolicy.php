@@ -39,7 +39,6 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): Response
     {
-        //var_dump($user->id, $task->user_id);
         return $user->admin || $user->id === $task->user_id ?
             Response::allow() :
             Response::deny('You do not have permission to update this task.');
